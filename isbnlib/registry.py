@@ -87,8 +87,8 @@ def load_plugins():  # pragma: no cover
         try:
             for entry in entry_points(group='isbnlib.metadata'):
                 add_service(entry.name, entry.load())
-        except Exception:
-            LOGGER.critical('Some metadata plugins were not loaded!')
+        except Exception as exc:
+            LOGGER.critical('Some metadata plugins were not loaded!', exc_info=exc)
     global PROVIDERS
     _buf = list(services.keys())
     _buf.remove('default')
@@ -96,10 +96,10 @@ def load_plugins():  # pragma: no cover
     # get formatters from entry_points
     if options.get('LOAD_FORMATTER_PLUGINS', True):
         try:
-            for entry in iter_entry_points(group='isbnlib.formatters'):
+            for entry in entry_points(group='isbnlib.formatters'):
                 add_bibformatter(entry.name, entry.load())
-        except Exception:
-            LOGGER.critical('Some formatters plugins were not loaded!')
+        except Exception as exc:
+            LOGGER.critical('Some formatters plugins were not loaded!', exc_info=exc)
     global BIBFORMATS
     _buf = list(bibformatters.keys())
     _buf.remove('labels')
